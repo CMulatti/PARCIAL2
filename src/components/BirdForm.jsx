@@ -9,6 +9,7 @@ export default function BirdForm({ onAddBird }) {
   });
   const [imagePreview, setImagePreview] = useState(null);
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState(false); 
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -72,8 +73,8 @@ export default function BirdForm({ onAddBird }) {
     setFormData({ name: '', description: '', image: null });
     setImagePreview(null);
     setError('');
-    
-    alert('Ave guardada exitosamente! Ahora aparecerá en la página principal.');
+    setSuccess(true); // Replaces the alert  we had before. We move the message to the return area
+    setTimeout(() => setSuccess(false), 3000); //we hide the message after 3 secs
   };
 
   return (
@@ -83,6 +84,12 @@ export default function BirdForm({ onAddBird }) {
           {error}
         </div>
       )}
+
+      {success && (
+      <div className="alert alert-success" role="alert">
+        Ave guardada exitosamente! Ahora aparecerá en la página principal.
+      </div>
+    )}
 
       <div className="mb-3">
         <label htmlFor="name" className="form-label">Nombre del ave:</label>
