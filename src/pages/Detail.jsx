@@ -1,8 +1,7 @@
 export default function Detail({ bird, onBack }) {
   return (
-    <div className="container mt-5">
-      <button className="btn btn-secondary mb-4" onClick={onBack}>
-        ← Volver
+    <div className="container mt-5 detail-page">
+      <button className="btn btn-secondary mb-4" onClick={onBack}> Volver
       </button>
       <div className="row">
         <div className="col-md-6">

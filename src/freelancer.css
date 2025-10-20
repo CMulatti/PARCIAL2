@@ -60,8 +60,9 @@
    MASTHEAD -- AVES DE CHILE dark blue section with avatar
    ============================================ */
 body {
-  padding-top: 4rem;
+  padding-top: 6rem; /*was 4*/
 }
+
 
 .masthead {
   width: 100vw;
@@ -199,6 +200,7 @@ body {
   box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
   transition: all 0.3s ease;
   background-color: #fff;
+  text-align: center;
 }
 
 .bird-card:hover {
@@ -287,11 +289,44 @@ body {
   margin-left: calc(-50vw + 50%);
   padding: 6rem 0;
   background-color: #1abc9c;
-  color: #fff;
+  color: #fff; 
 }
 
 .about-section .container {
   max-width: 1140px;
   margin: 0 auto;
   padding: 0 1rem;
+}
+
+
+
+
+
+/* Fix for bird cards grid centering */
+.portfolio-section .row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 0 -0.75rem;
+}
+
+.portfolio-section .row > div {
+  padding: 0 0.75rem;
+}
+
+/* Fix for detail page image */
+.detail-page {
+  padding-top: 4rem;
+  margin-bottom: 4rem;
+}
+
+.detail-page img {
+  max-width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+.detail-page .img-fluid {
+  max-width: 100%;
+  height: auto;
 }
