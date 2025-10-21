@@ -3,17 +3,17 @@ import NavBar from '../NavBar';
 
 describe('Componente NavBar', () => {
   it('debe cambiar a la página home cuando se hace click en Inicio', () => {
-    let paginaLlamada = '';  //Simple variable to track what was called, we start it as an empty string
-    const mockSetCurrentPage = (pagina) => {
+    let paginaLlamada = '';  //Simple variable to track which page was requested, we start it as an empty string
+    const mockSetCurrentPage = (pagina) => { //create fake function that pretends to be setCurrentPage
       paginaLlamada = pagina; //change value to either home or admin
     };
     
-    render(<NavBar currentPage="admin" setCurrentPage={mockSetCurrentPage} />);
+    render(<NavBar currentPage="admin" setCurrentPage={mockSetCurrentPage} />);   //pretend we are on the Admin page
     
-    const linkInicio = screen.getByText(/Inicio/i);
-    fireEvent.click(linkInicio);
+    const linkInicio = screen.getByText(/Inicio/i); //find inicio link on the page
+    fireEvent.click(linkInicio);   //simulate user clicking inicio link. This should call mockSetCurrentPage('home')
     
-    expect(paginaLlamada).toBe('home');  //check the variable
+    expect(paginaLlamada).toBe('home');  //check the variable, check if pagina llamada equals home or not. If yes, then it passes the test
   });
 
   it('debe cambiar a la página admin cuando se hace click en Admin', () => {
