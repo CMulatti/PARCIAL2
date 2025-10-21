@@ -1,6 +1,4 @@
-/* ============================================
-   NAVBAR STYLING
-   ============================================ */
+/* =========== NAVBAR =============== */
 #mainNav {
   padding-top: 1rem;
   padding-bottom: 1rem;
@@ -56,9 +54,12 @@
   margin: 0 0.5rem;
 }
 
-/* ============================================
-   MASTHEAD -- AVES DE CHILE dark blue section with avatar
-   ============================================ */
+
+
+
+
+/* =============== MASTHEAD -- AVES DE CHILE dark blue section with avatar ============ */
+
 body {
   padding-top: 6rem; /*was 4*/
 }
@@ -149,9 +150,11 @@ body {
   }
 }
 
-/* ============================================
-   PORTFOLIO SECTION -- Has visto estas aves
-   ============================================ */
+
+
+
+/* =========== PORTFOLIO SECTION -- Has visto estas aves ============== */
+
 .portfolio-section {
   width: 100vw;
   margin-left: calc(-50vw + 50%);
@@ -190,9 +193,10 @@ body {
   color: #2c3e50;
 }
 
-/* ============================================
-   BIRD CARDS STYLING -- added this custom styles that were not in freelancer's 
-   ============================================ */
+
+
+/* ============ BIRD CARDS STYLING -- added this custom styles that were not in freelancer's ===================== */
+
 .bird-card {
   border: none;
   border-radius: 0.75rem;
@@ -243,9 +247,23 @@ body {
   }
 }
 
-/* ============================================
-   ABOUT SECTION (GREEN)
-   ============================================ */
+/* Fix for bird cards grid centering, if there is only one card, it will be centered */
+.portfolio-section .row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 0 -0.75rem;
+}
+
+.portfolio-section .row > div {
+  padding: 0 0.75rem;
+}
+
+
+
+
+/* ======= ABOUT SOBRE NOSOTROS GREEN SECTION =========================================== */
+
 .about-section {
   padding: 6rem 0;
   background-color: #1abc9c;
@@ -301,18 +319,7 @@ body {
 
 
 
-
-/* Fix for bird cards grid centering */
-.portfolio-section .row {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  margin: 0 -0.75rem;
-}
-
-.portfolio-section .row > div {
-  padding: 0 0.75rem;
-}
+/* ==========BIRD DETAIL APGE ======================================= */
 
 /* Fix for detail page image */
 .detail-page {

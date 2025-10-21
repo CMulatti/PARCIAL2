@@ -1,7 +1,6 @@
-// components/BirdForm.jsx
 import { useState } from 'react';
 
-export default function BirdForm({ onAddBird }) {
+function BirdForm({ onAddBird }) {
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -9,35 +8,38 @@ export default function BirdForm({ onAddBird }) {
   });
   const [imagePreview, setImagePreview] = useState(null);
   const [error, setError] = useState('');
-  const [success, setSuccess] = useState(false); 
+  const [success, setSuccess] = useState(false); //success starts as false, so nth is rendered at first
 
+  //we run this function each time the user types sth into a form field
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
+    const name = e.target.name;
+    const value = e.target.value;
+    // update state variable formData "...prev" because when the user types in one field, we don't want the other two fields to be reset
     setFormData(prev => ({
       ...prev,
-      [name]: value
+      [name]: value //update only the one that changed
     }));
     setError('');
   };
 
   const handleImageChange = (e) => {
-    const file = e.target.files[0];
+    const file = e.target.files[0]; //we take the first file
     if (file) {
       setFormData(prev => ({
         ...prev,
         image: file
       }));
       
-      const reader = new FileReader();
+      const reader = new FileReader(); //reads the file as Base64
       reader.onload = (event) => {
-        setImagePreview(event.target.result);
+        setImagePreview(event.target.result); //when ready, swt image preview to that string
       };
       reader.readAsDataURL(file);
     }
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault();
+    e.preventDefault(); //prevents page from refreshing which is the browser's default behaviour 
     
     // Validation
     if (!formData.name.trim()) {
@@ -64,24 +66,24 @@ export default function BirdForm({ onAddBird }) {
     const newBird = {
       name: formData.name.trim(),
       description: formData.description.trim(),
-      image: imagePreview
+      image: imagePreview              //here, we use the imagePreview which is Base64 string, so that we can store it in localStorage
     };
 
-    onAddBird(newBird);
+    onAddBird(newBird); //calls function provided by Parent (passed down from Admin as a prop) 
 
     // Reset form
     setFormData({ name: '', description: '', image: null });
-    setImagePreview(null);
-    setError('');
-    setSuccess(true); // Replaces the alert  we had before. We move the message to the return area
-    setTimeout(() => setSuccess(false), 3000); //we hide the message after 3 secs
+    setImagePreview(null); //null to clear any previous image
+    setError(''); // clear any previous error
+    setSuccess(true); // mark the operation succeeded. 
+    setTimeout(() => setSuccess(false), 3000); //we hide the message after 3 secs, setSuccess is reset
   };
 
   return (
     <form onSubmit={handleSubmit}>
-      {error && (
-        <div className="alert alert-danger" role="alert">
-          {error}
+      {/*if error has a truthy value -not empty, not null, or not false, render this div. Otherwise, render nth*/}
+      {error && (                                                   
+        <div className="alert alert-danger" role="alert">{error}
         </div>
       )}
 
@@ -91,6 +93,7 @@ export default function BirdForm({ onAddBird }) {
       </div>
     )}
 
+      {/*render text input for name*/}
       <div className="mb-3">
         <label htmlFor="name" className="form-label">Nombre del ave:</label>
         <input
@@ -104,6 +107,7 @@ export default function BirdForm({ onAddBird }) {
         />
       </div>
 
+      {/*render a textarea for description*/}
       <div className="mb-3">
         <label htmlFor="description" className="form-label">Descripción:</label>
         <textarea
@@ -117,6 +121,7 @@ export default function BirdForm({ onAddBird }) {
         />
       </div>
 
+      {/*render a file input for the image and a small preview of it*/}
       <div className="mb-3">
         <label htmlFor="image" className="form-label">Imagen del ave:</label>
         <input
@@ -138,9 +143,11 @@ export default function BirdForm({ onAddBird }) {
         )}
       </div>
 
+      {/*render a submit button*/}
       <button type="submit" className="btn btn-primary">
         Guardar Ave
       </button>
     </form>
   );
 }
+export default BirdForm;

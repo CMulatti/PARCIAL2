@@ -1,6 +1,8 @@
 import BirdCard from '../components/BirdCard.jsx'
 
-export default function Home({ birds, onBirdClick }) {
+{/*function that receives 2 props: birds, an array of bird objects from App.jsz via useBirds hook & onBirdClick, a callback fucntion
+  that handles clicking a bird to go to the Detail page*/}
+function Home({ birds, onBirdClick }) {
   return (
     <>
       <header className="masthead" id="mainNav">
@@ -37,8 +39,8 @@ export default function Home({ birds, onBirdClick }) {
           ) : (
             <div className="row">
               {birds.map(bird => (
-                <div key={bird.id} className="col-md-4 mb-4">
-                  <BirdCard bird={bird} onClick={() => onBirdClick(bird)} />
+                <div key={bird.id} className="col-md-4 mb-4">   {/*for each bird we render a birdCard inside a Bootstrap column*/}
+                  <BirdCard bird={bird} onClick={() => onBirdClick(bird)} />   {/*onBirdClick forwards the bird to the parent App.jsx*/}
                 </div>
               ))}
             </div>
@@ -55,3 +57,4 @@ export default function Home({ birds, onBirdClick }) {
     </>
   )
 }
+export default Home;

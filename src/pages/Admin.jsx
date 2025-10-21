@@ -1,10 +1,15 @@
 import BirdForm from '../components/BirdForm.jsx'
 
-export default function Admin({ birds, onAddBird, onBack }) {
+{/*birds=array, the list of all birds from the UseBirds hook*/}
+{/*onAddBird, the function that adds a new bird, passed from App, created in UseBirds*/}
+{/*onBack, function to go back to homepage - also from App*/}
+function Admin({ birds, onAddBird, onBack }) {
   return (
     <div className="container mt-5">
       <h1 className="mb-4">Bienvenido Administrador</h1>
       
+      {/*inside the first card, we render the BirdForm component*/}
+      {/*it passes down the onAddBird fucntion from App to BirdForm*/}
       <div className="row">
         <div className="col-md-8">
           <div className="card mb-4">
@@ -43,3 +48,4 @@ export default function Admin({ birds, onAddBird, onBack }) {
     </div>
   )
 }
+export default Admin;

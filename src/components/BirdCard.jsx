@@ -1,9 +1,9 @@
-export default function BirdCard({ bird, onClick }) {
+{/*this fucntion receives 2 props: bird containing the info about a single bird: name, image, desc & onClick, a function that runs when card is clicked*/}
+{/*BirdCard doesn't know what onClick does, it just calls it*/}
+{/*onClick inside the function is receiving onClick as a prop*/}
+function BirdCard({ bird, onClick }) {
   return (
-    <div
-      className="bird-card"
-      onClick={onClick}
-    >
+    <div className="bird-card" onClick={onClick}> {/*onClick is attached to the div now*/}
       <img 
         src={bird.image} 
         alt={bird.name}
@@ -18,3 +18,10 @@ export default function BirdCard({ bird, onClick }) {
     </div>
   );
 }
+export default BirdCard;
+
+{/*when we click the card :
+The div's onClick fires, it calls the onClick prop fuction,
+The onClick prop function calls 'onBirdClick(bird) in Home.jsx
+Home.jsx calls 'handleBirdClick(Bird) in App.jsx
+App.jsx sets the selected bird and changes the page to Detail*/}
