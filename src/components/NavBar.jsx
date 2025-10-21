@@ -1,5 +1,5 @@
 {/*function receives 2 props from App.jsx:
-  currentPAge: tells which page is currently active, home/detail/admin
+  currentPAge: tells which page is currently active, home detail or admin
   setCurrentPage: function from useState in App that changes the current state*/}
 
 
