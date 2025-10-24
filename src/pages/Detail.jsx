@@ -6,7 +6,6 @@ function Detail({ birds }) {
   const navigate = useNavigate()
   
   // Find the bird by ID
-  
   const bird = birds.find(b => b.id === Number(birdId))
   
   const handleBack = () => {

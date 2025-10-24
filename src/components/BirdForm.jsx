@@ -1,18 +1,29 @@
 import { useState } from 'react';
 
 function BirdForm({ onAddBird }) {
-  const [formData, setFormData] = useState({
+  ///we define a state in which formData stores everything the user types or selects, and setFormData which is the function that updates it
+  // at first, name and description are empty strings and image is null
+  const [formData, setFormData] = useState({ 
     name: '',
     description: '',
     image: null
   });
+
+  //here we hold the preview of the uploaded image
   const [imagePreview, setImagePreview] = useState(null);
+
+  //we track the touched fields. Touched means the user has clicked on the field and then left it (blurred it)
+  //this will help us decide when to show our validation messages, as these depend on the interaction.
   const [touched, setTouched] = useState({
     name: false,
     description: false,
     image: false
-  }); //Track which fields the user has interacted with
-  const [submitted, setSubmitted] = useState(false); //Track if form was submitted
+  }); 
+
+  //Track submission & success
+  //we are initialising a memory slot, submitted is the current value, setSubmitted is a function we can call later to change it.
+  // we're saying "Please remember a set of data called submitted and start it off with the value 'false' (it's like a light switch which is off until the user turns it on by submitting it)
+  const [submitted, setSubmitted] = useState(false); 
   const [success, setSuccess] = useState(false);
 
   //we define all validation errors in one single object
@@ -22,16 +33,19 @@ function BirdForm({ onAddBird }) {
     image: !imagePreview ? 'Por favor selecciona una imagen!' : ''
   };
 
-  //Check if a field is valid
+  //"A field is valid if there is no error message for it"
+  //errors[field] gets the erorr message for the specific field, so we check if the errors object has no message for that field.
   const isValid = (field) => !errors[field];
 
   //Return the correct CSS class for each field
+  //we add Bootstrap class depending on field state (red or green border)
   const fieldClass = (field) => {
     const show = touched[field] || submitted;
     if (!show) return 'form-control';
     return isValid(field) ? 'form-control is-valid' : 'form-control is-invalid';
   };
 
+  //... means we update only that specific property without erasing the others (the user can fill the form in any order)
   const handleInputChange = (e) => {
     const name = e.target.name;
     const value = e.target.value;
@@ -41,7 +55,7 @@ function BirdForm({ onAddBird }) {
     }));
   };
 
-  //mark field as "touched" when user leaves it
+  //when user leaves a field, mark it as touched so its validation message can be shown
   const handleBlur = (e) => {
     const name = e.target.name;
     setTouched(prev => ({
@@ -50,6 +64,7 @@ function BirdForm({ onAddBird }) {
     }));
   };
 
+  //when user selects and image, get the selected file, save it in the form data, use FileReader to read it as base64, once reading is done, display it.
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -67,8 +82,9 @@ function BirdForm({ onAddBird }) {
     }
   };
 
+  //when user submits form...
   const handleSubmit = (e) => {
-    e.preventDefault();
+    e.preventDefault(); //stop page reload
     setSubmitted(true); 
     
     // Check if all fields are valid
@@ -79,7 +95,7 @@ function BirdForm({ onAddBird }) {
         image: imagePreview
       };
 
-      onAddBird(newBird);
+      onAddBird(newBird); //here we send bird to parent component
 
       // Reset form
       setFormData({ name: '', description: '', image: null });
@@ -92,7 +108,7 @@ function BirdForm({ onAddBird }) {
   };
 
   return (
-    <form onSubmit={handleSubmit} noValidate> {/* noValidate to disable browser validation */}
+    <form onSubmit={handleSubmit} noValidate> {/* noValidate to tell the browser not to show its default validation messages as we are handling the validations ourselves. */}
       
       {success && (
         <div className="alert alert-success" role="alert">
@@ -105,16 +121,16 @@ function BirdForm({ onAddBird }) {
         <label htmlFor="name" className="form-label">Nombre del ave:</label>
         <input
           type="text"
-          className={fieldClass('name')} //Dynamic class 
+          className={fieldClass('name')} 
           id="name"
           name="name"
           placeholder="Ingrese nombre del ave"
           value={formData.name}
           onChange={handleInputChange}
-          onBlur={handleBlur} //Track when user leaves field 
+          onBlur={handleBlur} 
           required
         />
-        {/*Show error for name*/}
+        {/*if the field 'name' was touched OR the form was submitted, AND there's an error message for that field, then show the div with the error text*/}
         {(touched.name || submitted) && errors.name && (
           <div className="invalid-feedback d-block">{errors.name}</div>
         )}
@@ -124,14 +140,14 @@ function BirdForm({ onAddBird }) {
       <div className="mb-3">
         <label htmlFor="description" className="form-label">Descripción:</label>
         <textarea
-          className={fieldClass('description')} //Dynamic class
+          className={fieldClass('description')} 
           id="description"
           name="description"
           rows="5"
           placeholder="Ingrese detalles del ave"
           value={formData.description}
           onChange={handleInputChange}
-          onBlur={handleBlur} //track when user leaves field
+          onBlur={handleBlur} 
           required
         />
         {/*Show error for message*/}

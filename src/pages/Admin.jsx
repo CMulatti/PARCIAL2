@@ -1,8 +1,6 @@
 import BirdForm from '../components/BirdForm.jsx'
 import { useNavigate } from 'react-router-dom'
 
-{/*birds=array, the list of all birds from the UseBirds hook*/}
-{/*onAddBird, the function that adds a new bird, passed from App, created in UseBirds*/}
 
 function Admin({ birds, onAddBird }) {
   const navigate = useNavigate()
@@ -16,7 +14,7 @@ function Admin({ birds, onAddBird }) {
       <h1 className="mb-4">Bienvenido Administrador</h1>
       
       {/*inside the first card, we render the BirdForm component*/}
-      {/*it passes down the onAddBird fucntion from App to BirdForm*/}
+      {/*it passes down the onAddBird fucntion*/}
       <div className="row">
         <div className="col-md-8">
           <div className="card mb-4">
