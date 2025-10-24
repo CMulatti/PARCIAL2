@@ -1,8 +1,13 @@
 import BirdCard from '../components/BirdCard.jsx'
+import { useNavigate } from 'react-router-dom'
 
-{/*function that receives 2 props: birds, an array of bird objects from App.jsz via useBirds hook & onBirdClick, a callback fucntion
-  that handles clicking a bird to go to the Detail page*/}
-function Home({ birds, onBirdClick }) {
+
+function Home({ birds }) {
+  const navigate = useNavigate()
+  
+  const handleBirdClick = (bird) => {
+    navigate(`/bird/${bird.id}`) //Here we use backticks , in old code it could have been ('/bird/' + bird.id), this is String Concatenation. But now, the preferred is backticks bc they let us embed vars inside strings using ${}. console.log(`Hola, soy ${name} y tengo ${age} años`) It's like the f-strings we use in Python
+  }
   return (
     <>
       <header className="masthead" id="mainNav">
@@ -40,7 +45,7 @@ function Home({ birds, onBirdClick }) {
             <div className="row">
               {birds.map(bird => (
                 <div key={bird.id} className="col-md-4 mb-4">   {/*for each bird we render a birdCard inside a Bootstrap column*/}
-                  <BirdCard bird={bird} onClick={() => onBirdClick(bird)} />   {/*onBirdClick forwards the bird to the parent App.jsx*/}
+                  <BirdCard bird={bird} onClick={() => handleBirdClick(bird)} />   
                 </div>
               ))}
             </div>

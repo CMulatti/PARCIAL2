@@ -1,56 +1,80 @@
 import { render, screen, fireEvent } from '@testing-library/react';
+import { BrowserRouter } from 'react-router-dom';
 import NavBar from '../NavBar';
 
+// Helper function to render NavBar with Router
+const renderNavBar = () => {
+  return render(
+    <BrowserRouter>
+      <NavBar />
+    </BrowserRouter>
+  );
+};
+
 describe('Componente NavBar', () => {
-  it('debe cambiar a la página home cuando se hace click en Inicio', () => {
-    let paginaLlamada = '';  //Simple variable to track which page was requested, we start it as an empty string
-    const mockSetCurrentPage = (pagina) => { //create fake function that pretends to be setCurrentPage
-      paginaLlamada = pagina; //change value to either home or admin
-    };
-    
-    render(<NavBar currentPage="admin" setCurrentPage={mockSetCurrentPage} />);   //pretend we are on the Admin page
-    
-    const linkInicio = screen.getByText(/Inicio/i); //find inicio link on the page
-    fireEvent.click(linkInicio);   //simulate user clicking inicio link. This should call mockSetCurrentPage('home')
-    
-    expect(paginaLlamada).toBe('home');  //check the variable, check if pagina llamada equals home or not. If yes, then it passes the test
+  
+  // Clear localStorage before each test
+  beforeEach(() => {
+    localStorage.clear();
   });
 
-  it('debe cambiar a la página admin cuando se hace click en Admin', () => {
-    let paginaLlamada = '';
-    const mockSetCurrentPage = (pagina) => {
-      paginaLlamada = pagina;
-    };
+  it('debe mostrar el link "Ingresar" cuando no hay usuario autenticado', () => {
+    renderNavBar();
+    const linkIngresar = screen.getByText(/Ingresar/i);
+    expect(linkIngresar).toBeTruthy();
+  });
+
+  it('debe mostrar "Cerrar Sesión" cuando hay usuario autenticado', () => {
+    localStorage.setItem('isAuthenticated', 'true');
+    localStorage.setItem('userRole', 'user');
     
-    render(<NavBar currentPage="home" setCurrentPage={mockSetCurrentPage} />);
+    renderNavBar();
+    const botonCerrarSesion = screen.getByText(/Cerrar Sesión/i);
+    expect(botonCerrarSesion).toBeTruthy();
+  });
+
+  it('debe mostrar el link "Admin" solo cuando el usuario es admin', () => {
+    localStorage.setItem('isAuthenticated', 'true');
+    localStorage.setItem('userRole', 'admin');
     
+    renderNavBar();
     const linkAdmin = screen.getByText(/Admin/i);
-    fireEvent.click(linkAdmin);
+    expect(linkAdmin).toBeTruthy();
+  });
+
+  it('NO debe mostrar el link "Admin" cuando el usuario es regular', () => {
+    localStorage.setItem('isAuthenticated', 'true');
+    localStorage.setItem('userRole', 'user');
     
-    expect(paginaLlamada).toBe('admin');
+    renderNavBar();
+    const linkAdmin = screen.queryByText(/Admin/i);
+    expect(linkAdmin).toBeNull(); // Should not exist
   });
 
   it('debe contener el logo y texto "Aves de Chile"', () => {
-    render(<NavBar currentPage="home" setCurrentPage={() => {}} />);
-    
+    renderNavBar();
     const textoLogo = screen.getByText(/Aves de Chile/i);
     const imagen = screen.getByAltText(/Aves de Chile logo/i);
-    
     expect(textoLogo).toBeTruthy();
     expect(imagen).toBeTruthy();
   });
 
-  it('debe contener todos los enlaces de navegación', () => {
-    render(<NavBar currentPage="home" setCurrentPage={() => {}} />);
-    
+  it('debe contener el link "Inicio" siempre', () => {
+    renderNavBar();
     const linkInicio = screen.getByText(/Inicio/i);
-    const linkAdmin = screen.getByText(/Admin/i);
-    const linkIngresar = screen.getByText(/Ingresar/i);
-    const linkCrearCuenta = screen.getByText(/Crear cuenta/i);
-    
     expect(linkInicio).toBeTruthy();
-    expect(linkAdmin).toBeTruthy();
-    expect(linkIngresar).toBeTruthy();
-    expect(linkCrearCuenta).toBeTruthy();
+  });
+
+  it('debe limpiar localStorage cuando se hace click en "Cerrar Sesión"', () => {
+    localStorage.setItem('isAuthenticated', 'true');
+    localStorage.setItem('userRole', 'admin');
+    
+    renderNavBar();
+    const botonCerrarSesion = screen.getByText(/Cerrar Sesión/i);
+    
+    fireEvent.click(botonCerrarSesion);
+    
+    expect(localStorage.getItem('isAuthenticated')).toBeNull();
+    expect(localStorage.getItem('userRole')).toBeNull();
   });
 });

@@ -1,10 +1,36 @@
-{/*this fucntion receives 2 props: bird, the bird object to show in detail passed from App.jsx when a card is clicked
-  and onBack, a callback function that goes back to Home, also passed from App.jsx*/}
 
-function Detail({ bird, onBack }) {
+import { useParams, useNavigate } from 'react-router-dom'
+
+function Detail({ birds }) {
+  const { birdId } = useParams() // Get bird ID from URL
+  const navigate = useNavigate()
+  
+  // Find the bird by ID
+  
+  const bird = birds.find(b => b.id === Number(birdId))
+  
+  const handleBack = () => {
+    navigate('/') // Go back to home
+  }
+  
+  // If bird not found, show error message
+  if (!bird) {
+    return (
+      <div className="container mt-5">
+        <div className="alert alert-warning">
+          Ave no encontrada
+        </div>
+        <button className="btn btn-secondary" onClick={handleBack}>
+          Volver al inicio
+        </button>
+      </div>
+    )
+  }
+  
   return (
     <div className="container mt-5 detail-page">
-      <button className="btn btn-secondary mb-4" onClick={onBack}> Volver {/*when clicked, we call the parent's onBack function*/}
+      <button className="btn btn-secondary mb-4" onClick={handleBack}>
+        Volver
       </button>
       <div className="row">
         <div className="col-md-6">
@@ -18,4 +44,5 @@ function Detail({ bird, onBack }) {
     </div>
   )
 }
-export default Detail;
+
+export default Detail

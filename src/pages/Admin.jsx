@@ -1,9 +1,16 @@
 import BirdForm from '../components/BirdForm.jsx'
+import { useNavigate } from 'react-router-dom'
 
 {/*birds=array, the list of all birds from the UseBirds hook*/}
 {/*onAddBird, the function that adds a new bird, passed from App, created in UseBirds*/}
-{/*onBack, function to go back to homepage - also from App*/}
-function Admin({ birds, onAddBird, onBack }) {
+
+function Admin({ birds, onAddBird }) {
+  const navigate = useNavigate()
+  
+  const handleBackToHome = () => {
+    navigate('/')
+  }
+
   return (
     <div className="container mt-5">
       <h1 className="mb-4">Bienvenido Administrador</h1>
@@ -38,7 +45,7 @@ function Admin({ birds, onAddBird, onBack }) {
           <div className="card">
             <div className="card-body">
               <h5>Aves registradas: {birds.length}</h5>
-              <button className="btn btn-primary w-100 mt-3" onClick={onBack}>
+              <button className="btn btn-primary w-100 mt-3" onClick={handleBackToHome}>
                 Ir a página principal
               </button>
             </div>
