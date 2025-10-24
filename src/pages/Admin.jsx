@@ -12,7 +12,7 @@ function Admin({ birds, onAddBird }) {
   }
 
   return (
-    <div className="container mt-5">
+    <div className="container mt-5 mb-5">
       <h1 className="mb-4">Bienvenido Administrador</h1>
       
       {/*inside the first card, we render the BirdForm component*/}

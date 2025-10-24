@@ -4,7 +4,7 @@ function ProtectedRoute({ children, requireAdmin = false }) {
   const isAuthenticated = localStorage.getItem("isAuthenticated");
   const userRole = localStorage.getItem("userRole");
   
-  // If not authenticated at all, redirect to login
+  //if not authenticated at all, redirect to login
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }

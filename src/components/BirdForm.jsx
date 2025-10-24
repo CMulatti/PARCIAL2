@@ -7,130 +7,155 @@ function BirdForm({ onAddBird }) {
     image: null
   });
   const [imagePreview, setImagePreview] = useState(null);
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState(false); //success starts as false, so nth is rendered at first
+  const [touched, setTouched] = useState({
+    name: false,
+    description: false,
+    image: false
+  }); //Track which fields the user has interacted with
+  const [submitted, setSubmitted] = useState(false); //Track if form was submitted
+  const [success, setSuccess] = useState(false);
 
-  //we run this function each time the user types sth into a form field
+  //we define all validation errors in one single object
+  const errors = {
+    name: formData.name.trim() === '' ? 'Por favor ingresa el nombre del ave.': /\d/.test(formData.name) ? 'El nombre del ave no puede contener números!' : '',
+    description: formData.description.trim() === '' ? 'Por favor ingresa la descripción!' : '',
+    image: !imagePreview ? 'Por favor selecciona una imagen!' : ''
+  };
+
+  //Check if a field is valid
+  const isValid = (field) => !errors[field];
+
+  //Return the correct CSS class for each field
+  const fieldClass = (field) => {
+    const show = touched[field] || submitted;
+    if (!show) return 'form-control';
+    return isValid(field) ? 'form-control is-valid' : 'form-control is-invalid';
+  };
+
   const handleInputChange = (e) => {
     const name = e.target.name;
     const value = e.target.value;
-    // update state variable formData "...prev" because when the user types in one field, we don't want the other two fields to be reset
     setFormData(prev => ({
       ...prev,
-      [name]: value //update only the one that changed
+      [name]: value
     }));
-    setError('');
+  };
+
+  //mark field as "touched" when user leaves it
+  const handleBlur = (e) => {
+    const name = e.target.name;
+    setTouched(prev => ({
+      ...prev,
+      [name]: true
+    }));
   };
 
   const handleImageChange = (e) => {
-    const file = e.target.files[0]; //we take the first file
+    const file = e.target.files[0];
     if (file) {
       setFormData(prev => ({
         ...prev,
         image: file
       }));
       
-      const reader = new FileReader(); //reads the file as Base64
+      const reader = new FileReader();
       reader.onload = (event) => {
-        setImagePreview(event.target.result); //when ready, swt image preview to that string
+        setImagePreview(event.target.result);
+        setTouched(prev => ({ ...prev, image: true })); //mark image as touched
       };
       reader.readAsDataURL(file);
     }
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault(); //prevents page from refreshing which is the browser's default behaviour 
+    e.preventDefault();
+    setSubmitted(true); 
     
-    // Validation
-    if (!formData.name.trim()) {
-      setError('Por favor ingresa el nombre del ave.');
-      return;
+    // Check if all fields are valid
+    if (isValid('name') && isValid('description') && isValid('image')) {
+      const newBird = {
+        name: formData.name.trim(),
+        description: formData.description.trim(),
+        image: imagePreview
+      };
+
+      onAddBird(newBird);
+
+      // Reset form
+      setFormData({ name: '', description: '', image: null });
+      setImagePreview(null);
+      setTouched({ name: false, description: false, image: false }); //Reset touched
+      setSubmitted(false); //Reset submitted
+      setSuccess(true);
+      setTimeout(() => setSuccess(false), 3000);
     }
-
-    if (/\d/.test(formData.name)) {
-      setError('El nombre del ave no puede contener números!');
-      return;
-    }
-
-    if (!formData.description.trim()) {
-      setError('Por favor ingresa la descripción!');
-      return;
-    }
-
-    if (!imagePreview) {
-      setError('Por favor selecciona una imagen!');
-      return;
-    }
-
-    // Create new bird object with base64 image
-    const newBird = {
-      name: formData.name.trim(),
-      description: formData.description.trim(),
-      image: imagePreview              //here, we use the imagePreview which is Base64 string, so that we can store it in localStorage
-    };
-
-    onAddBird(newBird); //calls function provided by Parent (passed down from Admin as a prop) 
-
-    // Reset form
-    setFormData({ name: '', description: '', image: null });
-    setImagePreview(null); //null to clear any previous image
-    setError(''); // clear any previous error
-    setSuccess(true); // mark the operation succeeded. 
-    setTimeout(() => setSuccess(false), 3000); //we hide the message after 3 secs, setSuccess is reset
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      {/*if error has a truthy value -not empty, not null, or not false, render this div. Otherwise, render nth*/}
-      {error && (                                                   
-        <div className="alert alert-danger" role="alert">{error}
+    <form onSubmit={handleSubmit} noValidate> {/* noValidate to disable browser validation */}
+      
+      {success && (
+        <div className="alert alert-success" role="alert">
+          Ave guardada exitosamente! Ahora aparecerá en la página principal.
         </div>
       )}
 
-      {success && (
-      <div className="alert alert-success" role="alert">
-        Ave guardada exitosamente! Ahora aparecerá en la página principal.
-      </div>
-    )}
-
-      {/*render text input for name*/}
+      {/* Name input*/}
       <div className="mb-3">
         <label htmlFor="name" className="form-label">Nombre del ave:</label>
         <input
           type="text"
-          className="form-control"
+          className={fieldClass('name')} //Dynamic class 
           id="name"
           name="name"
           placeholder="Ingrese nombre del ave"
           value={formData.name}
           onChange={handleInputChange}
+          onBlur={handleBlur} //Track when user leaves field 
+          required
         />
+        {/*Show error for name*/}
+        {(touched.name || submitted) && errors.name && (
+          <div className="invalid-feedback d-block">{errors.name}</div>
+        )}
       </div>
 
-      {/*render a textarea for description*/}
+      {/*Description textarea */}
       <div className="mb-3">
         <label htmlFor="description" className="form-label">Descripción:</label>
         <textarea
-          className="form-control"
+          className={fieldClass('description')} //Dynamic class
           id="description"
           name="description"
           rows="5"
-          placeholder="Ingrese detalles del ave (características, habitat, comportamiento, etc. Puede escribir múltiples párrafos)"
+          placeholder="Ingrese detalles del ave"
           value={formData.description}
           onChange={handleInputChange}
+          onBlur={handleBlur} //track when user leaves field
+          required
         />
+        {/*Show error for message*/}
+        {(touched.description || submitted) && errors.description && (
+          <div className="invalid-feedback d-block">{errors.description}</div>
+        )}
       </div>
 
-      {/*render a file input for the image and a small preview of it*/}
+      {/*image input */}
       <div className="mb-3">
         <label htmlFor="image" className="form-label">Imagen del ave:</label>
         <input
           type="file"
-          className="form-control"
+          className={fieldClass('image')} 
           id="image"
           accept="image/*"
           onChange={handleImageChange}
+          required
         />
+        {/*Show error for image*/}
+        {(touched.image || submitted) && errors.image && (
+          <div className="invalid-feedback d-block">{errors.image}</div>
+        )}
+
         {imagePreview && (
           <div className="mt-3">
             <p className="text-muted">Vista previa:</p>
@@ -143,7 +168,6 @@ function BirdForm({ onAddBird }) {
         )}
       </div>
 
-      {/*render a submit button*/}
       <button type="submit" className="btn btn-primary">
         Guardar Ave
       </button>

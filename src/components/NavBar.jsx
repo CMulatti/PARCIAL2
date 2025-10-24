@@ -14,18 +14,43 @@ export default function NavBar() {
   return (
     <nav className="navbar navbar-expand-lg bg-black text-uppercase fixed-top" id="mainNav">
       <div className="container-fluid">
-        <Link 
-          to="/" 
-          className="navbar-brand"
-          style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}
-        >
-          <img 
-            src="/bird-logo.png" 
-            alt="Aves de Chile logo"
-            style={{ height: '40px', width: 'auto' }}
-          />
-          Aves de Chile
-        </Link>
+        {/*logo with Bootstrap dropdown */}
+        <div className="dropdown">
+          <a
+            className="navbar-brand dropdown-toggle"
+            href="#"
+            role="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+            style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}
+          >
+            <img
+              src="/bird-logo.png"
+              alt="Aves de Chile logo"
+              style={{ height: '40px', width: 'auto' }}
+            />
+            Aves de Chile
+          </a>
+          
+          <ul className="dropdown-menu">
+            <li>
+              <Link to="/" className="dropdown-item">
+              Inicio
+              </Link>
+            </li>
+            <li>
+              <Link to="/datos-curiosos" className="dropdown-item">
+              Datos Curiosos
+              </Link>
+            </li>
+            <li>
+              <Link to="/sobre-nosotros" className="dropdown-item">
+              Sobre Nosotros
+              </Link>
+            </li>
+          </ul>
+        </div>
+        
         
         {/*Hamburger Menu Botton taken from freelancer. This is only for mobile version/small screens*/}
         <button
@@ -55,7 +80,7 @@ export default function NavBar() {
               </li>
             )}
             
-            {/* Login or Logout button */}
+            {/*Login or Logout button */}
             {!isAuthenticated ? (
               <li className="nav-item mx-0 mx-lg-1">
                 <Link to="/login" className="nav-link py-3 px-0 px-lg-3 rounded">

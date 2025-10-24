@@ -20,8 +20,3 @@ function BirdCard({ bird, onClick }) {
 }
 export default BirdCard;
 
-{/*when we click the card :
-The div's onClick fires, it calls the onClick prop fuction,
-The onClick prop function calls 'onBirdClick(bird) in Home.jsx
-Home.jsx calls 'handleBirdClick(Bird) in App.jsx
-App.jsx sets the selected bird and changes the page to Detail*/}

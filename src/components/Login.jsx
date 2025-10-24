@@ -15,11 +15,11 @@ function Login() {
       localStorage.setItem("userRole", "admin");
       navigate("/admin");
     }
-    // Check for regular user credentials
+    //Check for regular user credentials
     else if (username === "user" && password === "1234") {
       localStorage.setItem("isAuthenticated", "true");
       localStorage.setItem("userRole", "user");
-      navigate("/"); // Regular users go to homepage
+      navigate("/"); //regular users go to homepage
     }
     else {
       alert("Credenciales incorrectas!!");
@@ -54,7 +54,7 @@ function Login() {
           Ingresar
         </button>
         
-        {/* Helper text for testing */}
+        {/*helper credentials for testing */}
         <div className="mt-3 text-muted small">
           <p className="mb-1"><strong>Credenciales de prueba:</strong></p>
           <p className="mb-0">Admin: admin / 1234</p>
