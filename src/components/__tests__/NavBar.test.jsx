@@ -61,8 +61,8 @@ describe('Componente NavBar', () => {
 
   it('debe contener el link "Inicio" siempre', () => {
     renderNavBar();
-    const linkInicio = screen.getByText(/Inicio/i);
-    expect(linkInicio).toBeTruthy();
+    const linksInicio = screen.getAllByText(/Inicio/i);
+    expect(linksInicio.length).toBeGreaterThan(0); //we check that at least one exists
   });
 
   it('debe limpiar localStorage cuando se hace click en "Cerrar Sesión"', () => {
